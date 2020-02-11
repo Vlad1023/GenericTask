@@ -11,10 +11,6 @@ namespace GenericTask
     }
     class MyList<T>
     {
-        public MyList()
-        {
-
-        }
         class List
         {
             public T info;
@@ -27,40 +23,76 @@ namespace GenericTask
         }
         int lenght = 0;
         List head;
-        public T getInfo()
-        {
-            return this.head.next.info;
-        }
         public void Add(T toAdd)
         {
             if (head == null) head = new List(toAdd);
             else
             {
-                findLast(ref head, toAdd);
+                findLastAdd(ref head, toAdd);
             }
             this.lenght++;
         }
-        void findLast(ref List current,T toAdd)
+        public int Lenght { get { return this.lenght; } }
+        void findLastAdd(ref List current, T toAdd)
         {
-            while(current != null)
+            if (current != null)
             {
-                findLast(ref current.next,toAdd);
+                findLastAdd(ref current.next, toAdd);
+                if (current != null) return;
             }
             current = new List(toAdd);
         }
-    }
-        class Program
+        T findByIndex(int index)
         {
-            static void Main(string[] args)
+            int temp = 0;
+            List current = this.head;
+            while (temp != index)
             {
-                Console.WriteLine("Hello World!");
-            MyList<int> list = new MyList<int>();
-            list.Add(6);
-            list.Add(68);
-            Console.WriteLine(list.getInfo()); 
-               
+                try
+                {
+                    current = current.next;
+                }
+                catch (NullReferenceException e)
+                {
+                    throw new Exception(e.Message);
+                }
+                temp++;
+            }
+            return current.info;
+        }
+        public T this[int index]
+        {
+            get
+            {
+                return findByIndex(index);
             }
         }
     }
+
+
+    static class MyExt
+    {
+
+        public static T[] GetArray<T>(this MyList<T> list)
+        {
+            T[] toReturn = new T[list.Lenght];
+            for (int i = 0; i < list.Lenght; i++)
+            {
+                toReturn[i] = list[i];
+            }
+            return toReturn;
+        }
+    }
+
+
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+          
+        }
+    }
+}
 
 
